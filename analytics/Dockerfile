@@ -1,33 +1,30 @@
-# Use an official Python runtime as a parent image
-FROM python:3.10-slim
+## Use an official Python runtime as a parent image
+FROM python:3.9-slim
 
-# Set environment variables
-ENV APP_HOME /usr/src/app
-ENV DB_USERNAME=your_username
-ENV DB_PASSWORD=your_password
-ENV DB_HOST=127.0.0.1
-ENV DB_PORT=5432
-ENV DB_NAME=postgres
-ENV APP_PORT=5153
+# Set environment variables for database connection
+ENV DB_USERNAME=myuser
+ENV DB_PASSWORD=mypassword
+
+# Install system dependencies required for PostgreSQL and Python packages
+RUN apt-get update -y && apt-get install -y \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Upgrade pip, setuptools, and wheel
+RUN pip install --upgrade pip setuptools wheel
 
 # Set the working directory in the container
-WORKDIR $APP_HOME
+WORKDIR /app
 
-# Update the local package index and install required packages
-RUN apt-get update -y && \
-    apt-get install -y build-essential libpq-dev
+# Copy the local code to the container's workspace
+COPY . /app
 
-# Copy the current directory contents into the container at $APP_HOME
-COPY . .
+# Install Python dependencies
+RUN pip install -r requirements.txt
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# Expose the port the app is running on
+EXPOSE 8000
 
-# Make port available to the world outside this container
-EXPOSE 5153
-
-# Define environment variable
-ENV NAME World
-
-# Run the application
+# Command to run the application
 CMD ["python", "app.py"]
