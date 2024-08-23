@@ -10,4 +10,4 @@ spec:
   persistentVolumeReclaimPolicy: Retain
   storageClassName: gp2
   hostPath:
-    path: "/Users/jake/k8s-data"
+    path: "/mnt/data"

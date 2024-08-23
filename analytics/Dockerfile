@@ -3,7 +3,10 @@ FROM python:3.9-slim
 
 # Set environment variables for database connection
 ENV DB_USERNAME=myuser
-ENV DB_PASSWORD=mypassword
+ENV DB_PASSWORD=${POSTGRES_PASSWORD}
+ENV DB_HOST=127.0.0.1
+ENV DB_PORT=5432
+ENV DB_NAME=mydatabase
 
 # Install system dependencies required for PostgreSQL and Python packages
 RUN apt-get update -y && apt-get install -y \
@@ -22,9 +25,6 @@ COPY . /app
 
 # Install Python dependencies
 RUN pip install -r requirements.txt
-
-# Expose the port the app is running on
-EXPOSE 8000
 
 # Command to run the application
 CMD ["python", "app.py"]
