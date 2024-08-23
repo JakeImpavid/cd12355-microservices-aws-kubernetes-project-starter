@@ -4,7 +4,7 @@ metadata:
   name: coworking
 spec:
   # A local environment doesn't generally have a LoadBalancer, so we use NodePort instead.
-  type: NodePort
+  type: LoadBalancer
   selector:
     service: coworking
   ports:
@@ -32,7 +32,7 @@ spec:
       containers:
       - name: coworking
         # Locally hosted docker image
-        image: 514777330327.dkr.ecr.us-east-1.amazonaws.com/my-ecr:0.0.1:0.0.1
+        image: 514777330327.dkr.ecr.us-east-1.amazonaws.com/my-ecr:0.0.1
         imagePullPolicy: IfNotPresent
         livenessProbe:
           httpGet:
@@ -48,11 +48,11 @@ spec:
           timeoutSeconds: 5
         envFrom:
         - configMapRef:
-            name: Myconf-postgresql
+            name: myconf-postgresql
         env:
         - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: postgresql-service 
-              key: bXlwYXNzd29yZA==
+              key: DB_PASSWORD
       restartPolicy: Always
