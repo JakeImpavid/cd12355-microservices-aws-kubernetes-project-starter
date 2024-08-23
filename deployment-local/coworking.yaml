@@ -39,7 +39,7 @@ spec:
             path: /health_check
             port: 5153
           initialDelaySeconds: 5
-          timeoutSeconds: 2
+          timeoutSeconds: 5
         readinessProbe:
           httpGet:
             path: "/readiness_check"
